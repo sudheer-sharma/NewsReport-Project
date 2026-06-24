@@ -2,9 +2,10 @@ import React from "react";
 import Wrapper from "../Components/Wrapper";
 import { useEffect } from "react";
 import { useNewsContext } from "../context/NesContext";
+import Loader from "../Components/Loader";
 
 const News = ({ className }) => {
-  const { news, setNews, fetchNews } = useNewsContext();
+  const { news, setNews, fetchNews, loading } = useNewsContext();
 
   useEffect(() => {
     (async () => {
@@ -12,6 +13,8 @@ const News = ({ className }) => {
       setNews(data.articles);
     })();
   }, []);
+
+  if (loading) return <Loader className={"m-auto py-20 pb-40"} />;
 
   return (
     <Wrapper>

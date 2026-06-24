@@ -1,6 +1,7 @@
 import React from "react";
 import Wrapper from "./Wrapper";
 import { useNewsContext } from "../context/NesContext";
+import { useState } from "react";
 
 const Category = ({ className }) => {
   const { setNews, fetchNews } = useNewsContext();
@@ -15,10 +16,9 @@ const Category = ({ className }) => {
     "Technology",
   ];
 
-  const handleClick = async () => {
-    const data = await fetchNews("/everything?q=Sports");
-    console.log(data);
-
+  const handleClick = async (e) => {
+    const cat = e.target.value;
+    const data = await fetchNews(`/everything?q=${cat}`);
     setNews(data.articles);
   };
 
@@ -31,9 +31,8 @@ const Category = ({ className }) => {
           {categories.map((category) => {
             return (
               <button
-                onClick={() => {
-                  handleClick;
-                }}
+                onClick={handleClick}
+                value={category}
                 key={category}
                 className="btn btn-outline btn-success"
               >

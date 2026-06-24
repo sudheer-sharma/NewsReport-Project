@@ -1,7 +1,26 @@
 import React from "react";
 import Wrapper from "./Wrapper";
+import { useState } from "react";
+import { useEffect } from "react";
+import { useNewsContext } from "../context/NesContext";
 
 const Navbar = ({ className }) => {
+  const { setNews, fetchNews } = useNewsContext();
+
+  let timer = null;
+
+  const searchNews = (e) => {
+    const searchValue = e.target.value;
+    if (!searchValue) return;
+
+    clearTimeout(timer);
+
+    timer = setTimeout(async () => {
+      const data = await fetchNews(`/everything?q=${searchValue}`);
+      setNews(data.articles);
+    }, 2000);
+  };
+
   return (
     <div className={`bg-base-300 ${className}`}>
       <Wrapper>
@@ -11,6 +30,7 @@ const Navbar = ({ className }) => {
           </div>
           <div className="flex gap-2">
             <input
+              onChange={searchNews}
               type="text"
               placeholder="Search"
               className="input input-bordered w-24 md:w-auto"
